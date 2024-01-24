@@ -17,7 +17,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   // ฟังก์ชันเมื่อจบการแสดง Intro
   void _onIntroEnd(context) async {
     // ไปยังหน้า Login
-    Navigator.pushReplacementNamed(context,AppRouter.login);
+    Navigator.pushReplacementNamed(context, AppRouter.login);
   }
 
   // ฟังก์ชันกำหนดภาพที่ใช้แสดงใน Intro
@@ -29,9 +29,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     // กำหนดให้แสดงผลเฉพาะหน้าจอแนวตั้ง
     SystemChrome.setPreferredOrientations([
-      // DeviceOrientation.portraitUp,
-      // DeviceOrientation.landscapeLeft,
-      // DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
 
     const bodyStyle = TextStyle(fontSize: 19.0);
