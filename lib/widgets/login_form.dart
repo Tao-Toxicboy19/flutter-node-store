@@ -1,6 +1,7 @@
-// ignore_for_file: unused_field, must_be_immutable
+// ignore_for_file: unused_field, must_be_immutable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
 import 'package:flutter_node_store/widgets/social_media_option.dart';
 
@@ -31,27 +32,15 @@ class LoginForm extends StatelessWidget {
             height: 30,
           ),
           Form(
-              key: _formKeyLogin,
-              child: Column(children: [
-                TextFormField(
+            key: _formKeyLogin,
+            child: Column(
+              children: [
+                customTextField(
                   controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  autofocus: false,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    hintText: "Email",
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40),
-                      borderSide:
-                          const BorderSide(width: 0, style: BorderStyle.none),
-                    ),
-                    filled: true,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    fillColor: Colors.grey[300],
-                  ),
+                  hintText: "Email",
+                  prefixIcon: Icon(Icons.email),
+                  obscureText: false,
+                  textInputType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "กรุณากรอกอีเมล";
@@ -64,31 +53,19 @@ class LoginForm extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
+                customTextField(
+                    controller: _passwordController,
                     hintText: "Password",
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40),
-                      borderSide:
-                          const BorderSide(width: 0, style: BorderStyle.none),
-                    ),
-                    filled: true,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    fillColor: Colors.grey[300],
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "กรุณากรอกรหัสผ่าน";
-                    } else if (value.length < 6) {
-                      return "กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร";
-                    }
-                    return null;
-                  },
-                ),
+                    prefixIcon: Icon(Icons.lock),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "กรุณากรอกรหัสผ่าน";
+                      } else if (value.length < 6) {
+                        return "กรุณากรอกรหัสผ่านอย่างน้อย 6 ตัวอักษร";
+                      }
+                      return null;
+                    }),
                 const SizedBox(
                   height: 10,
                 ),
@@ -107,19 +84,22 @@ class LoginForm extends StatelessWidget {
                   height: 10,
                 ),
                 RoundedButton(
-                    label: "LOGIN",
-                    onPressed: () {
-                      // ตรวจสอบข้อมูลฟอร์ม
-                      if (_formKeyLogin.currentState!.validate()) {
-                        // ถ้าข้อมูลผ่านการตรวจสอบ ให้ทำการบันทึกข้อมูล
-                        _formKeyLogin.currentState!.save();
+                  label: "LOGIN",
+                  onPressed: () {
+                    // ตรวจสอบข้อมูลฟอร์ม
+                    if (_formKeyLogin.currentState!.validate()) {
+                      // ถ้าข้อมูลผ่านการตรวจสอบ ให้ทำการบันทึกข้อมูล
+                      _formKeyLogin.currentState!.save();
 
-                        // แสดงข้อมูลที่บันทึกใน Console
-                        print("Email: ${_emailController.text}");
-                        print("Password: ${_passwordController.text}");
-                      }
-                    })
-              ])),
+                      // แสดงข้อมูลที่บันทึกใน Console
+                      print("Email: ${_emailController.text}");
+                      print("Password: ${_passwordController.text}");
+                    }
+                  },
+                )
+              ],
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
