@@ -22,6 +22,44 @@ class RegisterForm extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  Future<void> _handleSubmit(BuildContext context) async {
+    if (_formKeyRegister.currentState!.validate()) {
+      _formKeyRegister.currentState!.save();
+      var response = jsonDecode(
+        await ApiService().registerLocal(
+          {
+            "firstname": _firstNameController.text,
+            "lastname": _lastNameController.text,
+            "email": _emailController.text,
+            "password": _passwordController.text
+          },
+        ),
+      );
+      if (response["success"] == 'No network is Connected') {
+        Utility.showAlertDialog(
+          context,
+          "แจ้งเตือน",
+          response["message"],
+        );
+      } else {
+        if (response['status'] == 'ok') {
+          Navigator.pushReplacementNamed(context, AppRouter.login);
+        } else {
+          Utility.showAlertDialog(
+            context,
+            'แจ้งเตือน',
+            response['message'],
+          );
+          Utility.showAlertDialog(
+            context,
+            'แจ้งเตือน',
+            response['message'],
+          );
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -122,46 +160,7 @@ class RegisterForm extends StatelessWidget {
                 ),
                 RoundedButton(
                   label: "SIGN UP",
-                  onPressed: () async {
-                    // ตรวจสอบข้อมูลฟอร์ม
-                    if (_formKeyRegister.currentState!.validate()) {
-                      // ถ้าข้อมูลถูกต้อง ให้ทำการบันทึกข้อมูล
-                      _formKeyRegister.currentState!.save();
-                      var response = jsonDecode(
-                        await ApiService().registerLocal(
-                          {
-                            "firstname": _firstNameController.text,
-                            "lastname": _lastNameController.text,
-                            "email": _emailController.text,
-                            "password": _passwordController.text
-                          },
-                        ),
-                      );
-                      if (response["success"] == 'No network is Connected') {
-                        Utility.showAlertDialog(
-                          context,
-                          "แจ้งเตือน",
-                          response["message"],
-                        );
-                      } else {
-                        if (response['status'] == 'ok') {
-                          Navigator.pushReplacementNamed(
-                              context, AppRouter.login);
-                        } else {
-                          Utility.showAlertDialog(
-                            context,
-                            'แจ้งเตือน',
-                            response['message'],
-                          );
-                          Utility.showAlertDialog(
-                            context,
-                            'แจ้งเตือน',
-                            response['message'],
-                          );
-                        }
-                      }
-                    }
-                  },
+                  onPressed: () => _handleSubmit(context),
                 ),
               ],
             ),
