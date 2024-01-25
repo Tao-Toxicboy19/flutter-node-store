@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_node_store/routes/app_router.dart';
+import 'package:flutter_node_store/services/api_service.dart';
+import 'package:flutter_node_store/utils/utility.dart';
 import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
 
@@ -123,12 +127,39 @@ class RegisterForm extends StatelessWidget {
                     if (_formKeyRegister.currentState!.validate()) {
                       // ถ้าข้อมูลถูกต้อง ให้ทำการบันทึกข้อมูล
                       _formKeyRegister.currentState!.save();
-
-                      // แสดงข้อมูลที่บันทึกได้ทาง Console
-                      print("First Name: ${_firstNameController.text}");
-                      print("Last Name: ${_lastNameController.text}");
-                      print("Email: ${_emailController.text}");
-                      print("Password: ${_passwordController.text}");
+                      var response = jsonDecode(
+                        await ApiService().registerLocal(
+                          {
+                            "firstname": _firstNameController.text,
+                            "lastname": _lastNameController.text,
+                            "email": _emailController.text,
+                            "password": _passwordController.text
+                          },
+                        ),
+                      );
+                      if (response["success"] == 'No network is Connected') {
+                        Utility.showAlertDialog(
+                          context,
+                          "แจ้งเตือน",
+                          response["message"],
+                        );
+                      } else {
+                        if (response['status'] == 'ok') {
+                          Navigator.pushReplacementNamed(
+                              context, AppRouter.login);
+                        } else {
+                          Utility.showAlertDialog(
+                            context,
+                            'แจ้งเตือน',
+                            response['message'],
+                          );
+                          Utility.showAlertDialog(
+                            context,
+                            'แจ้งเตือน',
+                            response['message'],
+                          );
+                        }
+                      }
                     }
                   },
                 ),

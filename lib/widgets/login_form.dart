@@ -1,6 +1,7 @@
 // ignore_for_file: unused_field, must_be_immutable, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_node_store/routes/app_router.dart';
 import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
 import 'package:flutter_node_store/widgets/social_media_option.dart';
@@ -75,6 +76,8 @@ class LoginForm extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         //Open Forgot password screen here
+                        Navigator.pushNamed(
+                            context, AppRouter.forgotPassword);
                       },
                       child: const Text("ลืมรหัสผ่าน ?"),
                     )
@@ -114,9 +117,10 @@ class LoginForm extends StatelessWidget {
               InkWell(
                 onTap: () {
                   //Open Sign up screen here
+                  Navigator.pushReplacementNamed(context, AppRouter.register);
                 },
                 child: const Text(
-                  "สมัครฟรี",
+                  "สมัครสมาชิก",
                   style: TextStyle(
                     color: Colors.blue,
                     fontWeight: FontWeight.bold,

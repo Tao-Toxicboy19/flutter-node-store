@@ -1,10 +1,30 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_typing_uninitialized_variables
 
 import "package:flutter/material.dart";
 import "package:flutter_node_store/routes/app_router.dart";
 import "package:flutter_node_store/themes/styles.dart";
+import "package:shared_preferences/shared_preferences.dart";
+import 'package:logger/logger.dart';
 
-void main() {
+final logger = Logger(
+  printer: PrettyPrinter(
+    methodCount: 1,
+    colors: true,
+    printEmojis: true,
+    printTime: true,
+  ),
+);
+
+var initiaRoute;
+
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  (prefs.getBool('welcomeStatus') == true)
+      ? initiaRoute = AppRouter.login
+      : initiaRoute = AppRouter.welcome;
+
   runApp(MyApp());
 }
 
@@ -16,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      initialRoute: AppRouter.welcome,
+      initialRoute: initiaRoute,
       routes: AppRouter.routes,
     );
   }

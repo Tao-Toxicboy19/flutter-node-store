@@ -5,10 +5,10 @@ import 'package:flutter_node_store/themes/colors.dart';
 
 class ResponsiveLayout extends StatelessWidget {
   final Widget tabletChild;
-  final Widget mobildChild;
+  final Widget mobileChild;
 
   const ResponsiveLayout(
-      {Key? key, required this.tabletChild, required this.mobildChild})
+      {Key? key, required this.tabletChild, required this.mobileChild})
       : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class ResponsiveLayout extends StatelessWidget {
                     builder:
                         (BuildContext context, BoxConstraints constraints) {
                       Widget childWidget =
-                          (constraints.maxWidth > 800) ? tabletChild : mobildChild;
+                          (constraints.maxWidth > 800) ? tabletChild : mobileChild;
                       return childWidget;
                     },
                   ),

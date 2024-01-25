@@ -17,7 +17,7 @@ class RegisterScreen extends StatelessWidget {
         ),
         dataWidget: RegisterForm(),
       ),
-      mobildChild: MobileLayout(
+      mobileChild: MobileLayout(
         imageWidget: Image.asset(
           "assets/images/signup.png",
           width: 200,
