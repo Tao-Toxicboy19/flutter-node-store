@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_node_store/routes/app_router.dart';
 import 'package:flutter_node_store/services/api_service.dart';
-import 'package:flutter_node_store/utils/utility.dart';
+import 'package:flutter_node_store/widgets/share/alert_dialog.dart';
 import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
 
@@ -22,38 +22,41 @@ class RegisterForm extends StatelessWidget {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
+  final AlertDialogManager _alertDialogManager = AlertDialogManager();
+  final ApiService _apiService = ApiService();
+
   Future<void> _handleSubmit(BuildContext context) async {
     if (_formKeyRegister.currentState!.validate()) {
       _formKeyRegister.currentState!.save();
-      var response = jsonDecode(
-        await ApiService().registerLocal(
-          {
-            "firstname": _firstNameController.text,
-            "lastname": _lastNameController.text,
-            "email": _emailController.text,
-            "password": _passwordController.text
-          },
-        ),
-      );
-      if (response["success"] == 'No network is Connected') {
-        Utility.showAlertDialog(
+      var values = {
+        "firstname": _firstNameController.text,
+        "lastname": _lastNameController.text,
+        "email": _emailController.text,
+        "password": _passwordController.text
+      };
+
+      var res = await _apiService.registerLocal(values);
+      var result = jsonDecode(res);
+
+      if (result["success"] == 'No network is Connected') {
+        _alertDialogManager.showAlertDialog(
           context,
-          "แจ้งเตือน",
-          response["message"],
+          result["status"],
+          result["message"],
         );
       } else {
-        if (response['status'] == 'ok') {
+        if (result['status'] == 'ok') {
           Navigator.pushReplacementNamed(context, AppRouter.login);
         } else {
-          Utility.showAlertDialog(
+          _alertDialogManager.showAlertDialog(
             context,
-            'แจ้งเตือน',
-            response['message'],
+            result["status"],
+            result['message'],
           );
-          Utility.showAlertDialog(
+          _alertDialogManager.showAlertDialog(
             context,
-            'แจ้งเตือน',
-            response['message'],
+            result["status"],
+            result['message'],
           );
         }
       }

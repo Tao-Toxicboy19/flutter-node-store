@@ -1,8 +1,8 @@
 // ignore_for_file: unused_local_variable, avoid_print
 
 import 'package:dio/dio.dart';
-import 'package:flutter_node_store/main.dart';
 import 'package:flutter_node_store/utils/constants.dart';
+import 'package:flutter_node_store/utils/logger.dart';
 
 class DioConfig {
   static final Dio _dio = Dio()

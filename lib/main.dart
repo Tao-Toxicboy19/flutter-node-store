@@ -3,25 +3,15 @@
 import "package:flutter/material.dart";
 import "package:flutter_node_store/routes/app_router.dart";
 import "package:flutter_node_store/themes/styles.dart";
-import "package:shared_preferences/shared_preferences.dart";
-import 'package:logger/logger.dart';
-
-final logger = Logger(
-  printer: PrettyPrinter(
-    methodCount: 1,
-    colors: true,
-    printEmojis: true,
-    printTime: true,
-  ),
-);
+import "package:flutter_node_store/utils/shared_preferences.dart";
 
 var initiaRoute;
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  (prefs.getBool('welcomeStatus') == true)
+  await MySharedPreferences.initSharedPrefs();
+
+  (MySharedPreferences.getSharedPreference('welcomeStatus') == true)
       ? initiaRoute = AppRouter.login
       : initiaRoute = AppRouter.welcome;
 

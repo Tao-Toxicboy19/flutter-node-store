@@ -1,7 +1,11 @@
-// ignore_for_file: unused_field, must_be_immutable, prefer_const_constructors
+// ignore_for_file: unused_field, must_be_immutable, prefer_const_constructors, use_build_context_synchronously
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_node_store/routes/app_router.dart';
+import 'package:flutter_node_store/services/api_service.dart';
+import 'package:flutter_node_store/widgets/share/alert_dialog.dart';
 import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
 import 'package:flutter_node_store/widgets/social_media_option.dart';
@@ -15,6 +19,43 @@ class LoginForm extends StatelessWidget {
   // สร้าง TextEditingController
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  final ApiService _apiService = ApiService();
+  final AlertDialogManager _alertDialogManager = AlertDialogManager();
+
+  Future<void> _handleSubmit(BuildContext context) async {
+    if (_formKeyLogin.currentState!.validate()) {
+      _formKeyLogin.currentState!.save();
+
+      var values = {
+        "email": _emailController.text,
+        "password": _passwordController.text,
+      };
+      var res = await _apiService.loginLocal(values);
+      var result = jsonDecode(res);
+      if (result['massage'] == 'No network is Connected') {
+        _alertDialogManager.showAlertDialog(
+          context,
+          "แจ้งเตือน",
+          result["message"],
+        );
+      } else {
+        if (result['status'] == 'ok') {
+          _alertDialogManager.showAlertDialog(
+            context,
+            result['status'],
+            result["message"],
+          );
+        } else {
+          _alertDialogManager.showAlertDialog(
+            context,
+            result['status'],
+            result["message"],
+          );
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +117,7 @@ class LoginForm extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         //Open Forgot password screen here
-                        Navigator.pushNamed(
-                            context, AppRouter.forgotPassword);
+                        Navigator.pushNamed(context, AppRouter.forgotPassword);
                       },
                       child: const Text("ลืมรหัสผ่าน ?"),
                     )
@@ -88,17 +128,7 @@ class LoginForm extends StatelessWidget {
                 ),
                 RoundedButton(
                   label: "LOGIN",
-                  onPressed: () {
-                    // ตรวจสอบข้อมูลฟอร์ม
-                    if (_formKeyLogin.currentState!.validate()) {
-                      // ถ้าข้อมูลผ่านการตรวจสอบ ให้ทำการบันทึกข้อมูล
-                      _formKeyLogin.currentState!.save();
-
-                      // แสดงข้อมูลที่บันทึกใน Console
-                      print("Email: ${_emailController.text}");
-                      print("Password: ${_passwordController.text}");
-                    }
-                  },
+                  onPressed: () => _handleSubmit(context),
                 )
               ],
             ),
