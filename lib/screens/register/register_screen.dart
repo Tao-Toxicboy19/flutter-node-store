@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_node_store/widgets/mobile_layout.dart';
-import 'package:flutter_node_store/widgets/register_form.dart';
-import 'package:flutter_node_store/widgets/responsive_layout.dart';
-import 'package:flutter_node_store/widgets/tablet_layout.dart';
+import 'package:flutter_node_store/widgets/layouts/mobile_layout.dart';
+import 'package:flutter_node_store/widgets/forms/register_form.dart';
+import 'package:flutter_node_store/widgets/layouts/responsive_layout.dart';
+import 'package:flutter_node_store/widgets/layouts/tablet_layout.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});

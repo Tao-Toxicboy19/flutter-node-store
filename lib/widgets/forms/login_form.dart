@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_node_store/routes/app_router.dart';
 import 'package:flutter_node_store/services/api_service.dart';
+import 'package:flutter_node_store/utils/shared_preferences.dart';
 import 'package:flutter_node_store/widgets/share/alert_dialog.dart';
 import 'package:flutter_node_store/widgets/share/custom_textfield.dart';
 import 'package:flutter_node_store/widgets/share/rounded_button.dart';
@@ -17,8 +18,8 @@ class LoginForm extends StatelessWidget {
   final _formKeyLogin = GlobalKey<FormState>();
 
   // สร้าง TextEditingController
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: "test@");
+  final _passwordController = TextEditingController(text: "test12");
 
   final ApiService _apiService = ApiService();
   final AlertDialogManager _alertDialogManager = AlertDialogManager();
@@ -41,11 +42,10 @@ class LoginForm extends StatelessWidget {
         );
       } else {
         if (result['status'] == 'ok') {
-          _alertDialogManager.showAlertDialog(
-            context,
-            result['status'],
-            result["message"],
-          );
+          await MySharedPreferences.setSharedPreference(
+              'token', result['token']);
+          await MySharedPreferences.setSharedPreference('user', result['user']);
+          Navigator.pushReplacementNamed(context, AppRouter.dashboard);
         } else {
           _alertDialogManager.showAlertDialog(
             context,

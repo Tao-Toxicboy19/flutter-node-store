@@ -11,9 +11,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MySharedPreferences.initSharedPrefs();
 
-  (MySharedPreferences.getSharedPreference('welcomeStatus') == true)
-      ? initiaRoute = AppRouter.login
-      : initiaRoute = AppRouter.welcome;
+  if (MySharedPreferences.getSharedPreference('token') != null) {
+    initiaRoute = AppRouter.dashboard;
+  } else if (MySharedPreferences.getSharedPreference('welcomeStatus') == true) {
+    initiaRoute = AppRouter.login;
+  } else {
+    initiaRoute = AppRouter.welcome;
+  }
 
   runApp(MyApp());
 }
